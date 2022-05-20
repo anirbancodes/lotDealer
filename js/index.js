@@ -54,6 +54,7 @@ function setGameDrawTime() {
     gameMin = 0;
     gameHr++;
   }
+  if (gameHr == 13) gameHr = 1;
   let drawTime,
     ampm = hms[3];
   if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";

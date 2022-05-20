@@ -81,6 +81,7 @@ async function showDrawTbody(email) {
     gameMin = 0;
     gameHr++;
   }
+  if (gameHr == 13) gameHr = 1;
   let drawTime;
   if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
   else if (gameHr > 9 && ampm == "PM") drawTime = "9:0 AM";
@@ -116,32 +117,6 @@ function drawTbody(data) {
     document.getElementById("game-draw-tbody").innerHTML +=
       rowData + `</span></td></tr>`;
   });
-}
-
-/* async function testFuncFirebaseTimeCheck() {
-  console.log(await fetchTime().time);
-  await updateDoc(doc(db, "games", "2022-5-5"), {
-    time: serverTimestamp(),
-  });
-}
-
-document.getElementById("test-btn").addEventListener("click", () => {
-  testFuncFirebaseTimeCheck();
-}); */
-
-async function add(user_email) {
-  const amt = document.getElementById("amount").value;
-  alert("89");
-  await updateDoc(
-    doc(db, "users", user_email),
-    {
-      credHist: arrayUnion({ time: date, trans: amt, how: "Dealer Added" }),
-      credit: increment(amt),
-      credits: arrayUnion({ time: date, trans: amt, how: "Dealer Added" }),
-    },
-    { merge: true }
-  );
-  //minus from dealer
 }
 
 let betClicked = false;
@@ -245,100 +220,6 @@ async function play(email, number, amount) {
         console.log("Transaction failed: ", e);
       }
 
-      /*const batch = writeBatch(db);
-
-      batch.update(
-        doc(db, "games", date),
-        {
-          [`${drawTime}.${number}`]: arrayUnion({
-            amt: amount,
-            t: "d",
-            time: time + " " + ampm,
-            email: email,
-          }),
-        },
-        { merge: true }
-      );
-
-      batch.update(doc(db, "dealers", email, "offline", "lotto"), {
-        credit: increment(-1 * amount),
-        totPlay: increment(amount),
-      });
-
-      batch.update(doc(db, "dealers", email), {
-        credit: increment(-1 * amount),
-      });
-      batch.update(
-        doc(db, "dealers", email, "offline", "lotto", "games", date),
-        {
-          [`${drawTime}.${number}`]: arrayUnion({
-            time: time + " " + ampm,
-            amt: amount,
-          }),
-        },
-        { merge: true }
-      );
-      batch.update(
-        doc(db, "dealers", email, "offline", "lotto", "sale", date),
-        {
-          [`${drawTime}`]: increment(Number(amount)),
-        },
-        { merge: true }
-      );
-      // .catch((error) => {
-      //   betClicked = false;
-      //   console.log(error);
-      // });
-
-      await batch.commit(); */
-
-      /* await updateDoc(
-        doc(db, "games", date),
-        {
-          [`${drawTime}.${number}`]: arrayUnion({
-            amt: amount,
-            t: "d",
-            time: time + " " + ampm,
-            email: email,
-          }),
-        },
-        { merge: true }
-      );
-      await updateDoc(
-        doc(db, "dealers", email, "offline", "lotto"),
-        {
-          credit: increment(-1 * amount),
-          totPlay: increment(amount),
-        },
-        { merge: true }
-      );
-
-      await updateDoc(
-        doc(db, "dealers", email, "offline", "lotto", "games", date),
-        {
-          [`${drawTime}.${number}`]: arrayUnion({
-            time: time + " "+ampm,
-            amt: amount,
-          }),
-        },
-        { merge: true }
-      );
-      await updateDoc(
-        doc(db, "dealers", email, "offline", "lotto", "sale", date),
-        {
-          [`${drawTime}`]: increment(Number(amount)),
-        },
-        { merge: true }
-      ).catch((error) => {
-        betClicked = false;
-        console.log(error);
-      });
-
-      await updateDoc(doc(db, "dealers", email), {
-        credit: increment(-1 * amount),
-      });
-      */
-
       betClicked = false;
       //window.location = "/";
       document.getElementById("bet-amt").value = 0;
@@ -370,6 +251,7 @@ btn.addEventListener("click", async (e) => {
     }
   } else {
     alert("bet atleast 10 credit");
+    document.getElementById("bet-amt").value = 0;
     //betClicked = false;
   }
 });
@@ -384,6 +266,7 @@ addBulkBtn.addEventListener("click", async (e) => {
     const email = auth.currentUser.email;
     await play(email, scrip, amt);
     nx++;
+    document.getElementById(`bulk` + k + `-amt`).value = 0;
   }
   alert(`placed ${nx} orders`);
 });

@@ -43,12 +43,7 @@ async function loadUserData(email) {
     historyTable(email, date);
   }
 }
-//displayTime();
-async function displayTime() {
-  await fetchTime();
-  document.getElementById("time-counter").innerHTML = time;
-  // t();
-}
+
 function showUserCredits(name, credit) {
   document.getElementById("profile-name").textContent += name;
   document.getElementById("user-credit").textContent = credit;
@@ -58,25 +53,26 @@ async function historyTable(email, date) {
 
   const docSnap = await getDoc(ref);
   if (docSnap.exists()) {
-    const credits = docSnap.data().cred;
     document.getElementById("credit-table").innerHTML = `<div class="line">
     <p class="number">Time</p>
     <p class="number" style="margin-left: 20px">
       &emsp;&emsp;&emsp;&emsp;&emsp;Amt
     </p>
   </div>`;
-    credits.forEach((trans) => {
+    const credits = docSnap.data();
+    let keys = Object.keys(credits);
+    keys.forEach((match) => {
       document.getElementById("credit-table").innerHTML +=
         `  <div class="line">
-        <p class="number">` +
-        trans.time +
+          <p class="number">` +
+        match +
         `</p>
-        <p class="number" style="margin-left: 20px">:&emsp; ` +
-        trans.amt +
+          <p class="number" style="margin-left: 20px">:&emsp; ` +
+        credits[match] +
         `</p>
-      </div>`;
+        </div>`;
     });
-  }
+  } else alert("No credit added today");
 }
 const showBtn = document.getElementById("showBtn");
 showBtn.addEventListener("click", () => {
