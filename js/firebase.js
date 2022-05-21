@@ -141,6 +141,7 @@ async function play(email, number, amount) {
         gameMin = 0;
         gameHr++;
       }
+	 if (gameHr == 13) gameHr = 1;
       let drawTime;
       if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
       else if (gameHr > 9 && ampm == "PM") {
