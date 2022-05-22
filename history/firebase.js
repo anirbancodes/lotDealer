@@ -62,7 +62,6 @@ async function historyTable(email, date, match) {
   const docSnap = await getDoc(ref);
   if (docSnap.exists()) {
     const game = docSnap.data()[match];
-    console.log(game);
     if (game) {
       for (let i = 0; i < 10; i++) {
         let rowData = "";
