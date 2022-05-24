@@ -9,16 +9,9 @@ import {
   doc,
   getFirestore,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+import { fc } from "/js/c.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyAVgBu0P69xgUHnZ2Cc4G5IX6gHtb4-MBE",
-  authDomain: "qclottery.firebaseapp.com",
-  projectId: "qclottery",
-  storageBucket: "qclottery.appspot.com",
-  messagingSenderId: "650163027647",
-  appId: "1:650163027647:web:961de905315b549657500a",
-};
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(fc);
 const db = getFirestore(app);
 const auth = getAuth();
 //import { fetchTime } from "./index.js";

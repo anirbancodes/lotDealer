@@ -1,38 +1,22 @@
-const firebaseConfig = {
-  apiKey: "AIzaSyAVgBu0P69xgUHnZ2Cc4G5IX6gHtb4-MBE",
-  authDomain: "qclottery.firebaseapp.com",
-  projectId: "qclottery",
-  storageBucket: "qclottery.appspot.com",
-  messagingSenderId: "650163027647",
-  appId: "1:650163027647:web:961de905315b549657500a",
-};
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-
 import {
   getAuth,
   onAuthStateChanged,
   signOut,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+import { fc } from "/js/c.js";
 import {
   getDoc,
   doc,
-  updateDoc,
   arrayUnion,
-  serverTimestamp,
   runTransaction,
   increment,
-  setDoc,
-  writeBatch,
   getFirestore,
 } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
-
 import { fetchTime } from "./index.js";
-
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(fc);
 const db = getFirestore(app);
 const auth = getAuth();
-
 const logoutBtn = document.getElementById("logoutBtn");
 logoutBtn.addEventListener("click", (e) => {
   signOut(auth)
@@ -43,7 +27,6 @@ logoutBtn.addEventListener("click", (e) => {
       alert(error);
     });
 });
-
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
@@ -59,6 +42,7 @@ async function loadUserData(email) {
   const docSnap = await getDoc(ref);
   if (docSnap.exists()) {
     let data = docSnap.data();
+    if (data.active == false) activateDealer(email, data.name);
     showUserCredits(data.name, data.credit);
     showDrawTbody(email);
   }
@@ -84,10 +68,10 @@ async function showDrawTbody(email) {
     gameMin = 0;
     gameHr = 1;
   }
-  
+
   let drawTime;
   if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
-  else if (gameHr > 9 && ampm == "PM" && gameHr !=12) drawTime = "9:0 AM";
+  else if (gameHr > 9 && ampm == "PM" && gameHr != 12) drawTime = "9:0 AM";
   else drawTime = gameHr + ":" + gameMin + " " + t22.ampm;
 
   const ref = doc(db, "dealers", email, "offline", "lotto", "games", date);
@@ -141,16 +125,16 @@ async function play(email, number, amount) {
       let gameMin = Math.ceil(min / 15) * 15;
       if (min == 0 || min == 15 || min == 30 || min == 45) gameMin += 15;
       if (gameMin == 60 && gameHr != 12) {
-    gameMin = 0;
-    gameHr++;
-  } else if (gameMin == 60 && gameHr == 12) {
-    gameMin = 0;
-    gameHr = 1;
-  }
-	
+        gameMin = 0;
+        gameHr++;
+      } else if (gameMin == 60 && gameHr == 12) {
+        gameMin = 0;
+        gameHr = 1;
+      }
+
       let drawTime;
       if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
-      else if (gameHr > 9 && ampm == "PM" && gameHr !=12) {
+      else if (gameHr > 9 && ampm == "PM" && gameHr != 12) {
         alert("Game Closed");
         betClicked = false;
         return;
@@ -266,14 +250,63 @@ btn.addEventListener("click", async (e) => {
 const addBulkBtn = document.getElementById("btn-submit-bulk");
 addBulkBtn.addEventListener("click", async (e) => {
   let nx = 0;
+  const email = auth.currentUser.email;
   for (let k = 1; k < 5; k++) {
     let scrip = Number(document.getElementById(`bulk` + k + `-scrip`).value);
     let amt = Number(document.getElementById(`bulk` + k + `-amt`).value);
     if (amt < 10) continue;
-    const email = auth.currentUser.email;
+
     await play(email, scrip, amt);
     nx++;
     document.getElementById(`bulk` + k + `-amt`).value = 0;
   }
   alert(`placed ${nx} orders`);
+  const ref = doc(db, "dealers", email);
+  const docSnap = await getDoc(ref);
+  if (docSnap.exists()) {
+    let data = docSnap.data();
+    showUserCredits(data.name, data.credit);
+  }
 });
+
+async function activateDealer(email, name) {
+  try {
+    await runTransaction(db, async (transaction) => {
+      transaction.update(doc(db, "dealers", email), {
+        active: true,
+      });
+      transaction.set(doc(db, "dealers", email, "credits", "0"), {});
+
+      transaction.set(doc(db, "dealers", email, "offline", "lotto"), {
+        credit: 0,
+        name: name,
+        totPlay: 0,
+      });
+
+      transaction.set(
+        doc(db, "dealers", email, "offline", "lotto", "credits", "0"),
+        {}
+      );
+
+      transaction.set(
+        doc(db, "dealers", email, "offline", "lotto", "games", "0"),
+        {}
+      );
+
+      transaction.set(
+        doc(db, "dealers", email, "offline", "lotto", "sale", "0"),
+        {}
+      );
+
+      transaction.set(doc(db, "dealers", email, "agentsale", "0"), {});
+
+      transaction.set(doc(db, "dealers", email, "online", "lotto"), {});
+
+      transaction.set(doc(db, "dealers", email, "superCredit", "0"), {});
+      console.log("Dealer Doc created");
+    });
+  } catch (e) {
+    alert("Transaction failed: ", e);
+    console.error(e);
+  }
+}

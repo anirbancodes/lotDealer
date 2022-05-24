@@ -7,13 +7,37 @@
     <title>Add Credits</title>
     <link rel="stylesheet" href="../style.css" />
   </head>
-  <body style="padding-left: 40px">
-    <h2 style="color: black">>> PlayLot</h2>
-    <div style="text-align: left">
+  <style>
+    h2,
+    h3 {
+      font-family: "Poppins", sans-serif;
+    }
+  </style>
+  <body style="padding: 0 40px">
+    <h2 style="color: black">>> MyLot</h2>
+    <div class="header-user">
+      <p class="mob-margin-top-less-15" id="profile-name"></p>
+      <p class="mob-margin-top-less-15">
+        Credits: <span id="user-credit"></span>
+      </p>
+    </div>
+    <h2>Contact Your Dealer:</h2>
+    <h3
+      style="
+        color: orangered;
+        border: 1px solid orangered;
+        padding: 5px 15px;
+        width: fit-content;
+      "
+      id="dealer-email"
+    ></h3>
+    <br /><br />
+    <a class="btn-submit" href="/index.html">Back</a>
+    <!-- <div style="text-align: left">
       <p>Your credits will be credited to your balance within 15 minutes.</p>
       <h3 style="color: orangered">
         UPI
-        <!-- <span style="font-size: small">(Suggested)</span> -->
+         <span style="font-size: small">(Suggested)</span> 
       </h3>
       <strong>Mention your phone no. while or after payment</strong>
       <p>Rate: ₹1 = 1 credit (example: ₹1000 = 1000 credits)</p>
@@ -64,29 +88,57 @@
           >
         </strong>
       </h3>
-      <!-- <h3 style="color: orangered">
-        Bank Transfer
-        <span style="font-size: small">(Suggested)</span>
-      </h3>
-      <strong
-        >Email UTR or Transaction ID with your phone number to
-        devcodes@pm.me</strong
-      >
-      <p>Rate: ₹1 = 1 credit (example: ₹100 = 100 credits)</p>
-      <p>
-        Account Number: 9199xxxxxxxx<br />
-        IFSC: PYTM012xxxxx<br />Beneficiary Name: xxxxxxxxxx
-      </p> -->
-      <!-- <h3>Debit cards/Credit cards/Wallet</h3>
-      <p>Rate: ₹1 = 0.98 credit (example: ₹100 = 98 credits)</p>
-      <form>
-        <script
-          src="https://checkout.razorpay.com/v1/payment-button.js"
-          data-payment_button_id="pl_JK6AtStvB98vGA"
-          async
-        ></script>
-      </form> -->
-      <!-- <p>Offer: Now get 10 credits extra on adding every 1000.</p> -->
-    </div>
+    </div> -->
   </body>
+  <script type="module">
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+    } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+    import { fc } from "/js/c.js";
+    import {
+      getDoc,
+      doc,
+      getFirestore,
+    } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+
+    const app = initializeApp(fc);
+    const db = getFirestore(app);
+    const auth = getAuth();
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        loadUserData(user.email);
+      } else {
+        window.location = "/pages/login.html";
+      }
+    });
+
+    async function loadUserData(email) {
+      const ref = doc(db, "dealers", email);
+      const docSnap = await getDoc(ref);
+      if (docSnap.exists()) {
+        let data = docSnap.data();
+        showUserCredits(data.name, data.credit);
+        showDealerName(email);
+      }
+    }
+
+    function showUserCredits(name, credit) {
+      document.getElementById("profile-name").textContent += name;
+      document.getElementById("user-credit").textContent = credit;
+    }
+    async function showDealerName(email) {
+      const ref = doc(db, "dealers", email);
+      const docSnap = await getDoc(ref);
+
+      if (docSnap.exists()) {
+        const sEmail = docSnap.data().sEmail;
+        document.getElementById("dealer-email").innerHTML = sEmail;
+      }
+    }
+  </script>
 </html>
