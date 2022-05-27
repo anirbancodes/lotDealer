@@ -248,14 +248,15 @@ btn.addEventListener("click", async (e) => {
 });
 
 const addBulkBtn = document.getElementById("btn-submit-bulk");
-addBulkBtn.addEventListener("click", async (e) => {
+const bulkFunc = async () => {
+  console.log("clicked");
+  addBulkBtn.removeEventListener("click", bulkFunc);
   let nx = 0;
   const email = auth.currentUser.email;
   for (let k = 1; k < 5; k++) {
     let scrip = Number(document.getElementById(`bulk` + k + `-scrip`).value);
     let amt = Number(document.getElementById(`bulk` + k + `-amt`).value);
     if (amt < 10) continue;
-
     await play(email, scrip, amt);
     nx++;
     document.getElementById(`bulk` + k + `-amt`).value = 0;
@@ -267,7 +268,9 @@ addBulkBtn.addEventListener("click", async (e) => {
     let data = docSnap.data();
     showUserCredits(data.name, data.credit);
   }
-});
+  addBulkBtn.addEventListener("click", bulkFunc);
+};
+addBulkBtn.addEventListener("click", bulkFunc);
 
 async function activateDealer(email, name) {
   try {
