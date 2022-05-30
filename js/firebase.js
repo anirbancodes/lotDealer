@@ -68,17 +68,21 @@ async function showDrawTbody(email) {
     gameMin = 0;
     gameHr = 1;
   }
+  // else if(gameMin=0 && gameHr==12)
+  //   ampm="PM";
+
+  // if (gameHr == 12 && ampm == "AM") ampm = "PM";
 
   let drawTime;
   if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
   else if (gameHr > 9 && ampm == "PM" && gameHr != 12) drawTime = "9:0 AM";
-  else drawTime = gameHr + ":" + gameMin + " " + t22.ampm;
+  else drawTime = gameHr + ":" + gameMin + " " + ampm;
 
   const ref = doc(db, "dealers", email, "offline", "lotto", "games", date);
   const docSnap = await getDoc(ref);
   if (docSnap.exists()) {
     let gameData = docSnap.data()[drawTime];
-    if (gameData == undefined) console.log("oops");
+    // if (gameData == undefined) console.log("oops");
     drawTbody(gameData);
   }
 }
@@ -140,12 +144,17 @@ async function play(email, number, amount) {
         return;
       } else drawTime = gameHr + ":" + gameMin + " " + ampm;
 
-      // if (min % 10 == 9 && sec >= 50) {
-      //   alert("Time UP");
-      //   window.location = "/";
-      //   return;
-      // }
-      //
+      if (
+        (min % 10 == 59 && sec >= 45) ||
+        (min % 10 == 14 && sec >= 45) ||
+        (min % 10 == 29 && sec >= 45) ||
+        (min % 10 == 44 && sec >= 45)
+      ) {
+        alert("Time UP");
+        window.location = "/";
+        return;
+      }
+
       try {
         await runTransaction(db, async (transaction) => {
           const gamesDateDoc = await transaction.get(doc(db, "games", date));
