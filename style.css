@@ -343,15 +343,15 @@ mark {
   display: inline-block;
   padding: 20px;
   /* width: 110px; changed*/
-  width: 30px;
-  height: 28px; /*added changed*/
+  width: 20px;
+  height: 18px; /*added changed*/
   font-size: 12px;
-  line-height: 30px;
+  line-height: 20px;
   letter-spacing: 1px;
   margin: 0 auto;
   /* margin-left: 5px;
   margin-right: 5px; */
-  margin-right: 3.5px;
+  margin-right: 3.5px; /*added changed*/
   margin-bottom: 10px;
   text-align: center;
   /* border-radius: 4px; changed*/
