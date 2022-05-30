@@ -338,8 +338,8 @@ mark {
   padding: 20px;
   /* width: 110px; changed*/
   width: 30px;
-  height: 30px; /*added changed*/
-  font-size: 16px;
+  height: 28px; /*added changed*/
+  font-size: 12px;
   line-height: 30px;
   letter-spacing: 1px;
   margin: 0 auto;
