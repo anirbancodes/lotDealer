@@ -53,11 +53,13 @@ function showUserCredits(name, credit) {
   document.getElementById("user-credit").textContent = credit;
 }
 
-async function showDrawTbody(email) {
+async function calcDrawTime() {
   const t22 = await fetchTime();
   let date = t22.date,
+    time = t22.time,
     min = t22.min,
     gameHr = t22.hr,
+    sec = t22.sec,
     ampm = t22.ampm;
   let gameMin = Math.ceil(min / 15) * 15;
   if (min == 0 || min == 15 || min == 30 || min == 45) gameMin += 15;
@@ -68,15 +70,38 @@ async function showDrawTbody(email) {
     gameMin = 0;
     gameHr = 1;
   }
-  // else if(gameMin=0 && gameHr==12)
-  //   ampm="PM";
-
-  // if (gameHr == 12 && ampm == "AM") ampm = "PM";
-
   let drawTime;
+  if (gameHr == 12 && gameMin == 0 && ampm == "AM") ampm = "PM";
   if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
   else if (gameHr > 9 && ampm == "PM" && gameHr != 12) drawTime = "9:0 AM";
-  else drawTime = gameHr + ":" + gameMin + " " + ampm;
+  else drawTime = gameHr + ":" + gameMin + " " + t22.ampm;
+  return { date, drawTime, time, gameHr, ampm, min, sec };
+}
+
+async function showDrawTbody(email) {
+  /*const t22 = await fetchTime();
+
+  let date = t22.date,
+    min = t22.min,
+    gameHr = t22.hr,
+    ampm = t22.ampm;
+  let gameMin = Math.ceil(min / 15) * 15;
+  if (min == 0 || min == 15 || min == 30 || min == 45) gameMin += 15;
+
+  if (gameMin == 60 && gameHr != 12) {
+    gameMin = 0;
+    gameHr++;
+  } else if (gameMin == 60 && gameHr == 12) {
+    gameMin = 0;
+    gameHr = 1;
+  }
+
+  let drawTime;
+  if (gameHr == 12 && gameMin == 0 && ampm == "AM") ampm = "PM";
+  if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
+  else if (gameHr > 9 && ampm == "PM" && gameHr != 12) drawTime = "9:0 AM";
+  else drawTime = gameHr + ":" + gameMin + " " + ampm; */
+  const { date, drawTime } = await calcDrawTime();
 
   const ref = doc(db, "dealers", email, "offline", "lotto", "games", date);
   const docSnap = await getDoc(ref);
@@ -119,7 +144,7 @@ async function play(email, number, amount) {
   if (docSnap.exists()) {
     let data = docSnap.data();
     if (amount <= data.credit) {
-      const t22 = await fetchTime();
+      /* const t22 = await fetchTime();
       const date = t22.date,
         time = t22.time,
         ampm = t22.ampm;
@@ -137,12 +162,17 @@ async function play(email, number, amount) {
       }
 
       let drawTime;
-      if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
-      else if (gameHr > 9 && ampm == "PM" && gameHr != 12) {
+      if (gameHr == 12 && gameMin == 0 && ampm == "AM") ampm = "PM";
+      if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM"; */
+      //else
+      const { date, drawTime, time, gameHr, ampm, min, sec } =
+        await calcDrawTime();
+
+      if (gameHr > 9 && ampm == "PM" && gameHr != 12) {
         alert("Game Closed");
         betClicked = false;
         return;
-      } else drawTime = gameHr + ":" + gameMin + " " + ampm;
+      } // else drawTime = gameHr + ":" + gameMin + " " + ampm; */
 
       if (
         (min % 10 == 59 && sec >= 45) ||
@@ -225,7 +255,7 @@ async function play(email, number, amount) {
       document.getElementById("bet-amt").value = 0;
       await showDrawTbody(email);
     } else {
-      alert(`insufficient credits, add credits`);
+      alert(`Insufficient balance`);
     }
   }
 }
@@ -250,7 +280,7 @@ btn.addEventListener("click", async (e) => {
       showUserCredits(data.name, data.credit);
     }
   } else {
-    alert("bet atleast 10 credit");
+    alert("10 credit required");
     document.getElementById("bet-amt").value = 0;
     //betClicked = false;
   }
@@ -318,7 +348,7 @@ async function activateDealer(email, name) {
       console.log("Dealer Doc created");
     });
   } catch (e) {
-    alert("Transaction failed: ", e);
+    alert("Activation Failed");
     console.error(e);
   }
 }
