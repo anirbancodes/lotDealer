@@ -168,7 +168,10 @@ async function play(email, number, amount) {
       const { date, drawTime, time, gameHr, ampm, min, sec } =
         await calcDrawTime();
 
-      if (gameHr > 9 && ampm == "PM" && gameHr != 12) {
+      if (
+        (gameHr > 9 && ampm == "PM" && gameHr != 12) |
+        (gameHr == 12 && ampm == "AM")
+      ) {
         alert("Game Closed");
         betClicked = false;
         return;
