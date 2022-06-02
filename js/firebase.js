@@ -73,7 +73,11 @@ async function calcDrawTime() {
   let drawTime;
   if (gameHr == 12 && gameMin == 0 && ampm == "AM") ampm = "PM";
   if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
-  else if (gameHr >= 9 && gameMin > 0 && ampm == "PM" && gameHr != 12)
+  else if (
+    //gameHr >= 9 && gameMin > 0 && ampm == "PM" && gameHr != 12
+    (gameHr > 9 && ampm == "PM" && gameHr != 12) ||
+    (gameHr == 9 && gameMin > 0 && ampm == "PM" && gameHr != 12)
+  )
     drawTime = "9:0 AM";
   else drawTime = gameHr + ":" + gameMin + " " + ampm;
   return { date, drawTime, time, gameMin, gameHr, ampm, min, sec };
@@ -145,32 +149,12 @@ async function play(email, number, amount) {
   if (docSnap.exists()) {
     let data = docSnap.data();
     if (amount <= data.credit) {
-      /* const t22 = await fetchTime();
-      const date = t22.date,
-        time = t22.time,
-        ampm = t22.ampm;
-      let min = t22.min,
-        sec = t22.sec,
-        gameHr = t22.hr;
-      let gameMin = Math.ceil(min / 15) * 15;
-      if (min == 0 || min == 15 || min == 30 || min == 45) gameMin += 15;
-      if (gameMin == 60 && gameHr != 12) {
-        gameMin = 0;
-        gameHr++;
-      } else if (gameMin == 60 && gameHr == 12) {
-        gameMin = 0;
-        gameHr = 1;
-      }
-
-      let drawTime;
-      if (gameHr == 12 && gameMin == 0 && ampm == "AM") ampm = "PM";
-      if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM"; */
-      //else
       const { date, drawTime, time, gameMin, gameHr, ampm, min, sec } =
         await calcDrawTime();
 
       if (
-        (gameHr >= 9 && gameMin > 0 && ampm == "PM" && gameHr != 12) ||
+        (gameHr > 9 && ampm == "PM" && gameHr != 12) ||
+        (gameHr == 9 && gameMin > 0 && ampm == "PM" && gameHr != 12) ||
         (gameHr == 12 && ampm == "AM")
       ) {
         alert("Game Closed");
