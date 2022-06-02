@@ -100,7 +100,7 @@ async function showDrawTbody(email) {
   let drawTime;
   if (gameHr == 12 && gameMin == 0 && ampm == "AM") ampm = "PM";
   if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
-  else if (gameHr > 9 && ampm == "PM" && gameHr != 12) drawTime = "9:0 AM";
+  else if (gameHr >= 9 && ampm == "PM" && gameHr != 12) drawTime = "9:0 AM";
   else drawTime = gameHr + ":" + gameMin + " " + ampm; */
   const { date, drawTime } = await calcDrawTime();
 
@@ -170,7 +170,7 @@ async function play(email, number, amount) {
         await calcDrawTime();
 
       if (
-        (gameHr > 9 && gameMin > 0 && ampm == "PM" && gameHr != 12) ||
+        (gameHr >= 9 && gameMin > 0 && ampm == "PM" && gameHr != 12) ||
         (gameHr == 12 && ampm == "AM")
       ) {
         alert("Game Closed");
