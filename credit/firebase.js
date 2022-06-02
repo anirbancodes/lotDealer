@@ -42,28 +42,43 @@ function showUserCredits(name, credit) {
   document.getElementById("user-credit").textContent = credit;
 }
 async function historyTable(email, date) {
+  document.getElementById("credit-table").innerHTML = "";
   const ref = doc(db, "dealers", email, "offline", "lotto", "credits", date);
 
   const docSnap = await getDoc(ref);
   if (docSnap.exists()) {
-    document.getElementById("credit-table").innerHTML = `<div class="line">
-    <p class="number">Time</p>
-    <p class="number" style="margin-left: 20px">
-      &emsp;&emsp;&emsp;&emsp;&emsp;Amt
-    </p>
-  </div>`;
+    //   document.getElementById("credit-table").innerHTML = `<div class="line">
+    //   <p class="number">Time</p>
+    //   <p class="number" style="margin-left: 20px">
+    //     &emsp;&emsp;&emsp;&emsp;&emsp;Amt
+    //   </p>
+    // </div>`;
     const credits = docSnap.data();
     let keys = Object.keys(credits);
     keys.forEach((match) => {
       document.getElementById("credit-table").innerHTML +=
-        `  <div class="line">
-          <p class="number">` +
-        match +
-        `</p>
-          <p class="number" style="margin-left: 20px">:&emsp; ` +
+        // `  <div class="line">
+        //  <p class="number">` +
+        //match +
+        // `</p>
+        //   <p class="number" style="margin-left: 20px">:&emsp; ` +
+        // credits[match] +
+        // `</p>
+        // </div>`;
+        `<div class="client m-b-5">
+        <div class="p-1-5">
+          <p>
+         Game Credit</p>
+          <div class="card-inner">
+            <p style="color: orangered">` +
         credits[match] +
         `</p>
-        </div>`;
+            <p>` +
+        match +
+        `</p>
+          </div>
+        </div>
+      </div>`;
     });
   } else alert("No credit added today");
 }
