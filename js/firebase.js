@@ -45,6 +45,9 @@ async function loadUserData(email) {
     if (data.active == false) activateDealer(email, data.name);
     showUserCredits(data.name, data.credit);
     showDrawTbody(email);
+    document.getElementById(
+      "wp-msg"
+    ).href = `https://wa.me/918016575357?text=I'm%20${email}%20here`;
   }
 }
 
