@@ -80,9 +80,11 @@ async function historyTable(email, date, match) {
       }
     } else {
       document.getElementById("comment-text").innerHTML =
-        "No history for " + date + " " + match;
+        "Not played at " + match + " on " + date + " 😕";
     }
-  }
+  } else
+    document.getElementById("comment-text").innerHTML =
+      "No games on " + date + " 😕";
 }
 const showBtn = document.getElementById("showBtn");
 showBtn.addEventListener("click", () => {

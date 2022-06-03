@@ -33,17 +33,14 @@ async function loadUserData(email) {
     saleTbody(email);
   }
 }
-//displayTime();
-async function displayTime() {
-  await fetchTime();
-  document.getElementById("time-counter").innerHTML = time;
-  // t();
-}
+
 function showUserCredits(name, credit) {
   document.getElementById("profile-name").textContent += name;
   document.getElementById("user-credit").textContent = credit;
 }
 async function saleTbody(email, date) {
+  document.getElementById("sale-tbody").innerHTML = "";
+  document.getElementById("dayTotSale").innerHTML = "";
   if (!date) {
     let now = new Date();
     let date1 =
@@ -60,8 +57,8 @@ async function saleTbody(email, date) {
       document.getElementById(
         "sale-tbody"
       ).innerHTML = `<li class="table-header">
-            <div class="col">Match</div>
-            <div class="col">Sale</div>
+            <div class="col or">Match</div>
+            <div class="col or">Sale</div>
           </li>`;
       let totsale = 0;
       let keys = Object.keys(sale);
@@ -69,28 +66,30 @@ async function saleTbody(email, date) {
         totsale += sale[dtime];
         document.getElementById("sale-tbody").innerHTML +=
           `<li class="table-row">
-      <div class="col" data-label="Job Id">` +
+      <div class="col"
+      >` +
           dtime +
           `</div>
-      <div class="col" data-label="Customer Name" >` +
+      <div class="col" >` +
           sale[dtime] +
           `</div>
     </li>`;
       });
       document.getElementById("dayTotSale").innerHTML = totsale;
     }
-  }
+  } else document.getElementById("dayTotSale").innerHTML = "No sale on " + date; //"₹ 0";
 }
 const showBtn = document.getElementById("showBtn");
 showBtn.addEventListener("click", () => {
   let date = document.getElementById("date").value;
-  let i1 = date.indexOf("-"),
-    i2 = date.lastIndexOf("-");
-  date =
-    date.substring(0, i1 + 1) +
-    (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
-    "-" +
-    (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
-  console.log(date);
+  if (date) {
+    let i1 = date.indexOf("-"),
+      i2 = date.lastIndexOf("-");
+    date =
+      date.substring(0, i1 + 1) +
+      (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
+      "-" +
+      (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
+  }
   saleTbody(auth.currentUser.email, date);
 });

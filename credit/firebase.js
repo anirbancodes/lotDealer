@@ -42,6 +42,7 @@ function showUserCredits(name, credit) {
   document.getElementById("user-credit").textContent = credit;
 }
 async function historyTable(email, date) {
+  document.getElementById("comment-text").innerHTML = "";
   document.getElementById("credit-table").innerHTML = "";
   const ref = doc(db, "dealers", email, "offline", "lotto", "credits", date);
 
@@ -70,7 +71,7 @@ async function historyTable(email, date) {
           <p>
          Game Credit</p>
           <div class="card-inner">
-            <p style="color: orangered">` +
+            <p style="color: orangered"> + ` +
         credits[match] +
         `</p>
             <p>` +
@@ -80,19 +81,21 @@ async function historyTable(email, date) {
         </div>
       </div>`;
     });
-  } else alert("No credit added today");
+  } else
+    document.getElementById("comment-text").innerHTML = `No win on ${date} 😕`;
 }
 const showBtn = document.getElementById("showBtn");
 showBtn.addEventListener("click", () => {
   let date = document.getElementById("date").value;
-  let i1 = date.indexOf("-"),
-    i2 = date.lastIndexOf("-");
-  date =
-    date.substring(0, i1 + 1) +
-    (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
-    "-" +
-    (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
-  if (!date) {
+  if (date) {
+    let i1 = date.indexOf("-"),
+      i2 = date.lastIndexOf("-");
+    date =
+      date.substring(0, i1 + 1) +
+      (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
+      "-" +
+      (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
+  } else if (!date) {
     let now = new Date();
     let date1 =
       now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
