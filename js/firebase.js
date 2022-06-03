@@ -47,7 +47,7 @@ async function loadUserData(email) {
     showDrawTbody(email);
     document.getElementById(
       "wp-msg"
-    ).href = `https://wa.me/918016575357?text=I'm%20${email}%20here`;
+    ).href = `https://wa.me/918016575357?text=Dealer%20${email}%20here`;
   }
 }
 
