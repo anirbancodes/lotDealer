@@ -26,7 +26,7 @@ html {
   user-select: none;
 }
 ::-webkit-scrollbar {
-  width: 18px;
+  width: 7px;
 }
 
 ::-webkit-scrollbar-track {
@@ -34,14 +34,14 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(234, 98, 49);
+  background-color: orangered;
   border-radius: 20px;
-  border: 6px solid transparent;
+  border: 0px solid transparent;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #000000;
+  background-color: rgb(215, 111, 215);
 }
 
 /* #Primary
@@ -86,6 +86,32 @@ p {
   border-radius: 20px;
   background-image: linear-gradient(138deg, var(--red), var(--yellow));
 }
+
+.btn-plum {
+  outline: none;
+  border: 0;
+  /* height: 50px;
+     width: 160px; */
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 12px 40px;
+  border-radius: 20px;
+  background-color: #f8ceec;
+  background-image: linear-gradient(315deg, #f8ceec 0%, #a88beb 74%);
+}
+.btn-plum:hover {
+  outline: none;
+  border: 0;
+  /* height: 50px;
+     width: 160px; */
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 12px 40px;
+  border-radius: 20px;
+  background-image: linear-gradient(138deg, var(--red), var(--yellow));
+}
 .fs-16 {
   font-size: 16px;
   padding: 12px 40px;
@@ -120,6 +146,21 @@ p {
 }
 .header-option:hover {
   box-shadow: 5px 10px #bfc0c3;
+}
+.btn-short {
+  width: max-content;
+  padding: 8px 25px;
+  font-size: 13px;
+  outline: none;
+  color: #4f718a;
+  background-color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+}
+.btn-short:hover {
+  color: orangered;
+  box-shadow: plum 0px 18px 50px -10px;
 }
 .search-box {
   text-align: center;
