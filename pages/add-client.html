@@ -22,7 +22,7 @@
   >
     <div class="header">
       <div style="display: flex; justify-content: space-between">
-        <h2>>> MyLot <<</h2>
+        <h2 style="color: #4f718a">>> MyLot <<</h2>
         <h3 class="margin-left-pc" id="time-counter"></h3>
       </div>
     </div>
@@ -32,12 +32,33 @@
 
     <input type="number" id="contact" placeholder="contact" />
     <input type="text" id="name" placeholder="name" />
-    <br /><br />
+    <br />
     <a class="btn-submit" id="createclient">Create Client</a>
+    <a class="btn-short" style="margin-top: 40px" href="/index.html"
+      >&#x2190;&nbsp;&nbsp;Back</a
+    >
     <br /><br />
-    <a class="btn-submit" href="/index.html">Back</a>
-    <br /><br />
-    <a class="btn-submit" id="logoutBtn">Logout</a>
+    <!-- <a class="btn-short" id="logoutBtn">Logout</a>
+    <br /><br /> -->
+
+    <div style="background-color: #f0f0f0; margin-bottom: -10px">
+      <p
+        style="
+          text-align: left;
+          font-size: 10px;
+          font-family: Poppins;
+          padding: 10px 20px;
+          line-height: 12px;
+        "
+      >
+        <span style="text-decoration: overline"
+          >© 2022, MyLot - QuickPlay Technologies LLP</span
+        ><br />
+        Only <span style="color: orangered">mylotto.in</span> &
+        <span style="color: orangered">mylot.org</span> are our authorized
+        domains
+      </p>
+    </div>
   </body>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -74,7 +95,9 @@
           );
 
           if (clientCollection.exists()) {
-            alert("already present" + email);
+            downlineDoc = true;
+            alert(`Error: ${email} already exists`);
+
             return;
           }
 
@@ -97,28 +120,29 @@
             { merge: true }
           );
         });
-        console.log("client Doc created");
+        // console.log("client Doc created");
         downlineDoc = true;
       } catch (e) {
         downlineDoc = false;
-        alert("Transaction failed: ", e);
-        console.error(e);
+        alert("Oops, Error !");
       }
 
       const createDealerID = async () => {
         let secondaryApp = initializeApp(fc, "secondary");
-
+        let createdUser = true;
         const auth1 = getAuth(secondaryApp);
 
         await createUserWithEmailAndPassword(auth1, email, password)
           .then(signOut(auth1))
           .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error(error);
-            console.log(errorCode, errorMessage);
+            createdUser = false;
+            // const errorCode = error.code;
+            // const errorMessage = error.message;
+            // console.error(error);
+            // console.log(errorCode, errorMessage);
           });
-        alert("created User");
+
+        if (createdUser == true) alert("created User");
       };
       if (downlineDoc == true) createDealerID();
     });

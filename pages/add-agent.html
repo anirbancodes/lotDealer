@@ -32,12 +32,29 @@
 
     <input type="number" id="contact" placeholder="contact" />
     <input type="text" id="name" placeholder="name" />
-    <br /><br />
+    <br />
     <a class="btn-submit" id="createagent">Create Agent</a>
     <br /><br />
-    <a class="btn-submit" href="/index.html">Back</a>
-    <br /><br />
-    <a class="btn-submit" id="logoutBtn">Logout</a>
+    <a class="btn-short" href="/index.html">&#x2190;&nbsp;&nbsp;Back</a>
+    <!-- <a class="btn-submit" id="logoutBtn">Logout</a> -->
+    <div style="background-color: #f0f0f0; margin-bottom: -10px">
+      <p
+        style="
+          text-align: left;
+          font-size: 10px;
+          font-family: Poppins;
+          padding: 10px 20px;
+          line-height: 12px;
+        "
+      >
+        <span style="text-decoration: overline"
+          >© 2022, MyLot - QuickPlay Technologies LLP</span
+        ><br />
+        Only <span style="color: orangered">mylotto.in</span> &
+        <span style="color: orangered">mylot.org</span> are our authorized
+        domains
+      </p>
+    </div>
   </body>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -69,16 +86,16 @@
 
       try {
         await runTransaction(db, async (transaction) => {
-          console.log("0");
           const agentCollection = await transaction.get(
             doc(db, "agents", email)
           );
-          console.log("1");
+
           if (agentCollection.exists()) {
+            downlineDoc = true;
             alert("already present" + email);
             return;
           }
-          console.log("1");
+
           transaction.set(doc(db, "agents", email), {
             contact: contact,
             name: name,
@@ -86,7 +103,6 @@
             credit: 0,
             active: false,
           });
-          console.log("1");
 
           transaction.update(
             doc(db, "dealers", auth.currentUser.email, "online", "lotto"),
@@ -98,31 +114,29 @@
             },
             { merge: true }
           );
-
-          console.log("f");
         });
-        console.log("Agent Doc created");
+        // console.log("Agent Doc created");
         downlineDoc = true;
       } catch (e) {
         downlineDoc = false;
-        alert("Transaction failed: ", e);
-        console.error(e);
+        alert("Oops, Error !");
       }
 
       const createDealerID = async () => {
         let secondaryApp = initializeApp(fc, "secondary");
-
+        let createdUser = true;
         const auth1 = getAuth(secondaryApp);
 
         await createUserWithEmailAndPassword(auth1, email, password)
           .then(signOut(auth1))
           .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.error(error);
-            console.log(errorCode, errorMessage);
+            createdUser = false;
+            // const errorCode = error.code;
+            // const errorMessage = error.message;
+            // console.error(error);
+            // console.log(errorCode, errorMessage);
           });
-        alert("created User");
+        if (createdUser == true) alert("created Agent");
       };
       if (downlineDoc == true) createDealerID();
     });

@@ -246,9 +246,8 @@ async function play(email, number, amount) {
             { merge: true }
           );
         });
-        console.log("Transaction successfully committed!");
       } catch (e) {
-        console.log("Transaction failed: ", e);
+        alert("error ! " + e);
       }
 
       betClicked = false;
@@ -264,6 +263,7 @@ async function play(email, number, amount) {
 const btn = document.getElementById("btn-submit");
 btn.addEventListener("click", async (e) => {
   if (betClicked === true) return;
+  btn.className = "btn-orange";
 
   const bet_amt = Number(document.getElementById("bet-amt").value);
   let bet_no;
@@ -280,9 +280,11 @@ btn.addEventListener("click", async (e) => {
       let data = docSnap.data();
       showUserCredits(data.name, data.credit);
     }
+    btn.className = "btn-plum";
   } else {
     alert("10 credit required");
     document.getElementById("bet-amt").value = 0;
+    btn.className = "btn-plum";
     //betClicked = false;
   }
 });
