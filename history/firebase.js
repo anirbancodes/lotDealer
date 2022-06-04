@@ -90,13 +90,22 @@ const showBtn = document.getElementById("showBtn");
 showBtn.addEventListener("click", () => {
   let date = document.getElementById("date").value;
   let match = document.getElementById("history-match").value;
-  console.log(match);
-  let i1 = date.indexOf("-"),
-    i2 = date.lastIndexOf("-");
-  date =
-    date.substring(0, i1 + 1) +
-    (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
-    "-" +
-    (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
+  if (date) {
+    let i1 = date.indexOf("-"),
+      i2 = date.lastIndexOf("-");
+    date =
+      date.substring(0, i1 + 1) +
+      (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
+      "-" +
+      (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
+  } else if (!date) {
+    let now = new Date();
+    let date1 =
+      now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+    date = date1;
+  }
+  if (!match) {
+    match = "9:0 AM";
+  }
   historyTable(auth.currentUser.email, date, match);
 });

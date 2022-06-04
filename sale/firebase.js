@@ -90,6 +90,11 @@ showBtn.addEventListener("click", () => {
       (Number(date.substring(i1 + 1, i2)) / 10) * 10 +
       "-" +
       (Number(date.substring(i2 + 1, i2 + 3)) / 10) * 10;
+  } else if (!date) {
+    let now = new Date();
+    let date1 =
+      now.getFullYear() + "-" + (now.getMonth() + 1) + "-" + now.getDate();
+    date = date1;
   }
   saleTbody(auth.currentUser.email, date);
 });
