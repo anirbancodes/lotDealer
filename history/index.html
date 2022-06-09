@@ -89,13 +89,13 @@
 
     <div style="padding: 10px 20px; display: flex;flex-direction: column;">
         <div style=" display: flex;">
-            <input class="btn-plum" style="padding: 10px 20px;" type="date" id="date" />
+            <input class="btn-plum" style="padding: 10px 20px;font-size: 14px;" type="date" id="date" />
             &emsp; &emsp;
                 <select
                 name="history-match"
                 id="history-match"
                 class="btn-plum"
-                style="color: white; padding: 5px 15px;"
+                style="color: white; padding: 5px 15px; font-size: 14px;"
                 >
           <option value="9:0 AM">9:0 AM</option>
           <option value="9:15 AM">9:15 AM</option>
@@ -152,8 +152,18 @@
           <option value="9:0 PM">9:0 PM</option>
         </select>
     </div>
-    <div style="margin-top: 20px;display: flex; align-items: center;">
-      <a style=" width: 30vw; text-align: center;" class="btn-short" id="showBtn">Show &ensp; <span style="color: orangered"> &#x27F6;</span></a></div>
+    <div style="margin-top: 20px;display: flex; justify-content: space-between; flex-direction: row;">
+      <a  class="btn-short" style=" width: 100px; text-align: center; height: 30px;"
+       id="showBtn">Show &ensp; <span style="color: orangered"> &#x27F6;</span></a>
+      <div style="display: flex; flex-direction:column; "
+      >
+      <p style="margin-top: -8px" id="games-res-date">
+      </p>
+      <!-- <p style="margin-top: -8px"><span>7:45 PM</span>&emsp;<span style="color: orangered">5</span></p> -->
+      <p style="margin-top: -15px"><span id="games-res-match"></span>&emsp;
+        <span style="color: orangered" id="games-res-scrip"></span></p>
+    </div></div>
+   
     </div>
     <div style="padding: 10px 20px">
       <div id="sale-table">
@@ -163,7 +173,7 @@
     <div style="height: 50px"></div>
   </div>
     <br /><br />
-    <div style="background-color: #F3F3F3; margin-bottom: -10px">
+    <div style="background-color: #F0F0F0; margin-bottom: -10px">
       <p
         style="
           text-align: left;

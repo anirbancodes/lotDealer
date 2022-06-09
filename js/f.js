@@ -303,7 +303,8 @@ const bulkFunc = async () => {
     nx++;
     document.getElementById(`bulk` + k + `-amt`).value = 0;
   }
-  alert(`placed ${nx} orders`);
+  // alert(`placed ${nx} orders`);
+  alert(`placed orders`);
   const ref = doc(db, "dealers", email);
   const docSnap = await getDoc(ref);
   if (docSnap.exists()) {

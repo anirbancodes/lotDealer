@@ -86,8 +86,22 @@ async function historyTable(email, date, match) {
     document.getElementById("comment-text").innerHTML =
       "No games on " + date + " 😕";
 }
+
+async function last2result(date, match) {
+  document.getElementById("games-res-date").innerHTML = date;
+  document.getElementById("games-res-match").innerHTML = match;
+  const ref = doc(db, "result", date);
+  const docSnap = await getDoc(ref);
+  if (docSnap.exists()) {
+    const result = docSnap.data();
+    document.getElementById("games-res-scrip").innerHTML = result[match];
+  } else {
+    document.getElementById("games-res-scrip").innerHTML = "Not found";
+  }
+}
+
 const showBtn = document.getElementById("showBtn");
-showBtn.addEventListener("click", () => {
+showBtn.addEventListener("click", async () => {
   let date = document.getElementById("date").value;
   let match = document.getElementById("history-match").value;
   if (date) {
@@ -107,5 +121,6 @@ showBtn.addEventListener("click", () => {
   if (!match) {
     match = "9:0 AM";
   }
-  historyTable(auth.currentUser.email, date, match);
+  await historyTable(auth.currentUser.email, date, match);
+  await last2result(date, match);
 });
