@@ -78,11 +78,7 @@ async function calcDrawTime() {
     if (ampm == "AM") ampm = "PM";
     else if (ampm == "PM") ampm = "AM";
   }
-  // if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
-  // else if (
-  //   (gameHr > 9 && ampm == "PM" && gameHr != 12) ||
-  //   (gameHr == 9 && gameMin > 0 && ampm == "PM" && gameHr != 12)
-  // )
+
   if (
     (gameHr < 9 && ampm == "AM") ||
     //gameHr >= 9 && gameMin > 0 && ampm == "PM" && gameHr != 12
@@ -97,28 +93,6 @@ async function calcDrawTime() {
 }
 
 async function showDrawTbody(email) {
-  /*const t22 = await fetchTime();
-
-  let date = t22.date,
-    min = t22.min,
-    gameHr = t22.hr,
-    ampm = t22.ampm;
-  let gameMin = Math.ceil(min / 15) * 15;
-  if (min == 0 || min == 15 || min == 30 || min == 45) gameMin += 15;
-
-  if (gameMin == 60 && gameHr != 12) {
-    gameMin = 0;
-    gameHr++;
-  } else if (gameMin == 60 && gameHr == 12) {
-    gameMin = 0;
-    gameHr = 1;
-  }
-
-  let drawTime;
-  if (gameHr == 12 && gameMin == 0 && ampm == "AM") ampm = "PM";
-  if (gameHr < 9 && ampm == "AM") drawTime = "9:0 AM";
-  else if (gameHr >= 9 && ampm == "PM" && gameHr != 12) drawTime = "9:0 AM";
-  else drawTime = gameHr + ":" + gameMin + " " + ampm; */
   const { date, drawTime } = await calcDrawTime();
 
   const ref = doc(db, "dealers", email, "offline", "lotto", "games", date);
@@ -258,6 +232,16 @@ async function play(email, number, amount) {
       alert(`Insufficient balance`);
     }
   }
+}
+
+function copyurl(scrip, amt) {
+  var inputc = document.body.appendChild(document.createElement("input"));
+  inputc.value = "";
+  inputc.focus();
+  inputc.select();
+  document.execCommand("copy");
+  inputc.parentNode.removeChild(inputc);
+  alert("order copied");
 }
 
 const btn = document.getElementById("btn-submit");

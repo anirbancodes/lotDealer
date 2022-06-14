@@ -56,6 +56,7 @@ async function historyTable(email, date) {
     // </div>`;
     const credits = docSnap.data();
     let keys = Object.keys(credits);
+    let totalCred = 0;
     keys.forEach((match) => {
       document.getElementById("credit-table").innerHTML +=
         // `  <div class="line">
@@ -80,7 +81,19 @@ async function historyTable(email, date) {
           </div>
         </div>
       </div>`;
+      totalCred += credits[match];
     });
+    document.getElementById("credit-table").innerHTML +=
+      `<div class="client m-b-5">
+    <div class="p-1-5">
+    <br>
+     
+      <div class="card-inner">
+        <p style="color: orangered"> Total Win : ₹ ` +
+      totalCred +
+      `</p>
+    </div>
+  </div>`;
   } else
     document.getElementById("comment-text").innerHTML = `No win on ${date} 😕`;
 }
