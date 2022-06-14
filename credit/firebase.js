@@ -81,7 +81,7 @@ async function historyTable(email, date) {
           </div>
         </div>
       </div>`;
-      totalCred += credits[match];
+      totalCred += Number(credits[match]);
     });
     document.getElementById("credit-table").innerHTML +=
       `<div class="client m-b-5">
