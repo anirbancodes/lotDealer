@@ -18,7 +18,7 @@ let date, time, hms;
 
 async function fetchTime() {
   let apiData;
-  await fetch("https://qctime1.p.rapidapi.com/time", optionsQcTime1)
+  await fetch("https://time.api.stoxi.one", optionsQcTime1)
     .then((res) => res.json())
     .then((res) => {
       apiData = res;
@@ -27,7 +27,7 @@ async function fetchTime() {
       hms = [res.hr, res.min, res.sec, res.ampm];
     })
     .catch(async (err) => {
-      await fetch("https://livetime.p.rapidapi.com/time", optionsLiveTime)
+      await fetch("https://time.api.stoxi.one", optionsLiveTime)
         .then((res) => res.json())
         .then((res) => {
           apiData = res;
@@ -77,7 +77,7 @@ function setGameDrawTime() {
 
   let drawTime,
     ampm = hms[3];
-   if (gameHr == 12 && gameMin == 0) {
+  if (gameHr == 12 && gameMin == 0) {
     if (ampm == "AM") ampm = "PM";
     else if (ampm == "PM") ampm = "AM";
   }
