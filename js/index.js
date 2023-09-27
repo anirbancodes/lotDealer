@@ -6,19 +6,11 @@ const optionsLiveTime = {
   },
 };
 
-const optionsQcTime1 = {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Host": "qctime1.p.rapidapi.com",
-    "X-RapidAPI-Key": "f61b57f958msh481ee55292f5d4dp1e901cjsnf5e1d31890bd",
-  },
-};
-
 let date, time, hms;
 
 async function fetchTime() {
   let apiData;
-  await fetch("https://time.api.stoxic.one", optionsQcTime1)
+  await fetch("https://time.api.mylot.org")
     .then((res) => res.json())
     .then((res) => {
       apiData = res;
@@ -27,7 +19,7 @@ async function fetchTime() {
       hms = [res.hr, res.min, res.sec, res.ampm];
     })
     .catch(async (err) => {
-      await fetch("https://time.api.stoxic.one", optionsLiveTime)
+      await fetch("https://time.api.mylotto.in")
         .then((res) => res.json())
         .then((res) => {
           apiData = res;
