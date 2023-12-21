@@ -84,7 +84,7 @@
       const params = new URL(document.location).searchParams;
       let userDemo = params.get("demoUser");
       let passDemo = params.get("demoPass");
-      if (userDemo && passDemo) {
+      if (userDemo == "demo" && passDemo == "demo") {
         let email = "dealer@demo.com";
         let password = "abc123";
 
