@@ -81,6 +81,27 @@
       const app = initializeApp(fc);
       const auth = getAuth(app);
 
+      const params = new URL(document.location).searchParams;
+      let userDemo = params.get("demoUser");
+      let passDemo = params.get("demoPass");
+      if (userDemo && passDemo) {
+        let email = "dealer@demo.com";
+        let password = "abc123";
+
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            // loginStyle();
+            // showHoldings(user.email);
+            window.location = "/";
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert(errorCode, errorMessage);
+          });
+      }
+
       loginBtn.addEventListener("click", (e) => {
         let email = document.getElementById("email").value;
         let password = document.getElementById("password").value;
