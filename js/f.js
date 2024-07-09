@@ -437,7 +437,7 @@ async function saleTbody() {
 saleTbody();
 const refreshResBtn = document.getElementById("refreshResBtn");
 refreshResBtn.addEventListener("click", () => {
-  let date = document.getElementById("date").value;
+  let date = document.getElementById("draw-date").value;
   if (date) {
     let i1 = date.indexOf("-"),
       i2 = date.lastIndexOf("-");
